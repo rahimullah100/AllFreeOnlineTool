@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tools - AllFreeTools</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/math-tools.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Math and Plotting Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/function-plot/1.22.8/function-plot.min.js"></script>
+    
+    <!-- Application Scripts -->
+     <script src="../js/function-plotter.js"></script>
+    <script src="../js/scientific-calculator.js" defer></script> 
+    <script src="../js/matrix-calculator.js" defer></script>
+    <script src="../js/statistics.js" defer></script>
+    <script src="../js/prime-factorization.js" defer></script>
+    <script src="../js/equation-solver.js" defer></script>
+    <script src="../js/complex.js" defer></script>
+    <script src="../js/vector.js" defer></script>
+    <script src="../js/gcd-lcm.js" defer></script>
+    <script src="../js/sequence.js" defer></script>
+    <script src="../js/polynomial.js" defer></script>
+    <script src="../js/logarithm.js" defer></script>
+    <script src="../js/exponential.js" defer></script>
+    <script src="../js/fraction.js" defer></script>
+    <script src="../js/binary.js" defer></script>
+    <script src="../js/hexadecimal.js" defer></script>
+    <script src="../js/octal.js" defer></script>
+    <script src="../js/roman.js" defer></script>
+    <script src="../js/base-converter.js" defer></script>
+    <script src="../js/number-converter.js" defer></script>
+    <script src="../js/random-number.js" defer></script>
+    <script src="../js/derivative.js" defer></script>
+    <script src="../js/integral.js" defer></script>
+    <script src="../js/probability.js"></script>
+    <style>
+        /* Tool Card Styles */
+        .tool-card {
+            display: none;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            transform: translateY(20px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tool-card.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 2;
+        }
+
+        /* Scientific Calculator Styles */
+        .calculator-display {
+            margin-bottom: 15px;
+        }
+
+        .calculator-display input {
+            width: 100%;
+            padding: 15px;
+            font-size: 24px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: black;
+            font-family: 'Inter', monospace;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .scientific-functions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .calc-btn {
+            padding: 12px;
+            font-size: 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: black;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .calc-btn:hover {
+            background-color: var(--hover-bg);
+            transform: translateY(-1px);
+        }
+
+        .calc-btn:active {
+            transform: translateY(1px);
+        }
+
+        .calc-btn[data-action="operator"] {
+            background-color: var(--input-bg);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .calc-btn[data-action="equals"] {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .calc-btn[data-action="equals"]:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .calc-btn[data-action="clear"],
+        .calc-btn[data-action="backspace"] {
+            background-color: var(--danger-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .calc-btn[data-action="clear"]:hover,
+        .calc-btn[data-action="backspace"]:hover {
+            background-color: var(--danger-dark);
+        }
+
+        .calc-btn[data-action="function"] {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .calc-btn[data-action="function"]:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* Input Styles */
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: black;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        /* Basic input styling */
+        input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: black;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+        
+        /* Remove default number input spinners */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+        .input-group input[type="number"] {
+            width: 100px;
+        }
+
+        .input-group input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Quick Navigation Styles */
+        .quick-nav {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-nav h2 {
+            margin-bottom: 1rem;
+            color: black;
+            font-size: 1.2rem;
+        }
+
+        .quick-nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--input-bg);
+            border-radius: 6px;
+            color: black;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-nav-links a:hover {
+            background: var(--primary-color);
+            color: black;
+            transform: translateY(-2px);
+        }
+
+        .quick-nav-links a.active {
+            background: var(--primary-color);
+            color: black;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Result Display */
+        .result-display {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--input-bg);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            /* color: black; */
+        }
+
+        /* Matrix Styles */
+        .matrix-input {
+            display: grid;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .matrix-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .matrix-cell input {
+            width: 60px;
+            text-align: center;
+        }
+
+        /* Graph Styles */
+        .graph-container {
+            width: 100%;
+            height: 300px;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        /* Formula Display */
+        .formula-display {
+            font-family: 'KaTeX_Math', serif;
+            font-size: 1.2em;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--input-bg);
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        /* Add these CSS variables to your root styles */
+        :root {
+            --danger-color: #dc3545;
+            --danger-dark: #c82333;
+            --hover-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dark mode specific adjustments */
+        [data-theme="dark"] .calc-btn {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .calc-btn[data-action="operator"] {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .calc-btn[data-action="function"] {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .calculator-display input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .calc-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Function Plotter Styles */
+        .function-plotter {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .function-plotter .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .function-plotter input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: black;
+            font-family: 'Inter', monospace;
+        }
+
+        .function-plotter .plot-container {
+            width: 100%;
+            height: 400px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            margin-top: 1rem;
+        }
+
+        .function-plotter .plot-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .function-plotter .plot-controls input[type="number"] {
+            width: 100px;
+        }
+
+        .function-plotter .error-message {
+            color: var(--danger-color);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+
+        /* // my new Style for Qick Navigarion */
+
+        /* Quick Navigation */
+        .quick-nav {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-nav h2 {
+            color: black;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .quick-nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .quick-nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--bg-color);
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .quick-nav-links a i {
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        .quick-nav-links a:hover {
+            background: var(--primary-color);
+            color: black;
+            transform: translateY(-2px);
+        }
+
+        .quick-nav-links a.active {
+            background: var(--primary-color);
+            color: black;
+        }
+
+        textarea{
+            color: black;
+        }
+/* 
+        select{
+            color: black;
+        }
+
+        option{
+            color: black;
+        } */
+
+         /* input{
+            color: black;
+         } */
+
+         input{
+            color: black;
+         }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>AllFreeTools</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="text-tools.html">Text Tools</a>
+                <!-- <a href="file-conversion.html">File Conversion</a> -->
+                <a href="dev-tools.html">Developer Tools</a>
+                <a href="image-tools.html">Image Tools</a>
+                <a href="color-tools.html">Color Tools</a>
+                <a href="math-tools.html" class="active">Math Tools</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="page-header">
+            <h1>Mathematical Tools</h1>
+            <p>Powerful calculators and mathematical utilities</p>
+        </section>
+
+        <!-- Quick Navigation -->
+        <section class="quick-nav">
+            <h2>Quick Navigation</h2>
+            <div class="quick-nav-links">
+                <a href="#calculator"><i class="fas fa-calculator"></i> Scientific Calculator</a>
+                <a href="#matrix-calculator"><i class="fas fa-table"></i> Matrix Calculator</a>
+                <a href="#equation-solver"><i class="fas fa-equals"></i> Equation Solver</a>
+                <a href="#function-plotter"><i class="fas fa-chart-line"></i> Function Plotter</a>
+                <a href="#statistics"><i class="fas fa-chart-bar"></i> Statistics Calculator</a>
+                <a href="#number-converter"><i class="fas fa-exchange-alt"></i> Number Converter</a> 
+                <a href="#prime-factorization"><i class="fas fa-sort-numeric-down"></i> Prime Factorization</a>
+                <a href="#gcd-lcm"><i class="fas fa-divide"></i> GCD & LCM Calculator</a>
+                <a href="#complex-numbers"><i class="fas fa-square-root-alt"></i> Complex Numbers</a>
+                <a href="#vector-calculator"><i class="fas fa-vector-square"></i> Vector Calculator</a>
+                <a href="#derivative-calculator"><i class="fas fa-superscript"></i> Derivative Calculator</a>
+                <!-- <a href="#integral-calculator"><i class="fas fa-integral"></i> Integral Calculator</a> -->
+                <a href="#series-calculator"><i class="fas fa-infinity"></i> Series Calculator</a>
+                <a href="#probability-calculator"><i class="fas fa-dice"></i> Probability Calculator</a>
+                <a href="#geometry-calculator"><i class="fas fa-draw-polygon"></i> Geometry Calculator</a>
+                <a href="#trigonometry"><i class="fas fa-sin"></i> Trigonometry Calculator</a>
+                <a href="#unit-converter"><i class="fas fa-ruler"></i> Unit Converter</a>
+                <a href="#percentage-calculator"><i class="fas fa-percent"></i> Percentage Calculator</a>
+                <!-- <a href="#sequence-calculator"><i class="fas fa-sort-numeric-up"></i> Sequence Calculator</a> -->
+            
+            </div>
+        </section>
+
+        <section class="tools-section">
+            <div class="tools-grid">
+                <!-- Prime Factorization -->
+                <div class="tool-card" id="prime-factorization">
+                    <h3><i class="fas fa-calculator"></i> Prime Factorization</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="factorize-input">Enter a number (greater than 1):</label>
+                            <input style="color: black;" type="number" id="factorize-input" class="number-input" min="2" placeholder="e.g., 42">
+                        </div>
+                        <button id="factorize" class="btn">Factorize</button>
+                        <div id="factorization-result" class="result-display"></div>
+                    </div>
+                </div>
+                
+                <!-- Scientific Calculator -->
+                <div class="tool-card" id="calculator">
+                    <div class="tool-header">
+                        <h3><i class="fas fa-calculator"></i> Scientific Calculator</h3>
+                        <p>Advanced calculator with scientific functions</p>
+                    </div>
+                    <div class="tool-content">
+                        <div class="calculator-display">
+                            <input type="text" id="calculator-display" readonly>
+                        </div>
+                        <div class="scientific-functions">
+                            <button class="calc-btn" data-action="function">sin</button>
+                            <button class="calc-btn" data-action="function">cos</button>
+                            <button class="calc-btn" data-action="function">tan</button>
+                            <button class="calc-btn" data-action="function">sqrt</button>
+                            <button class="calc-btn" data-action="function">log</button>
+                            <button class="calc-btn" data-action="function">ln</button>
+                            <button class="calc-btn" data-action="operator">^</button>
+                            <button class="calc-btn" data-action="constant">π</button>
+                            <button class="calc-btn" data-action="constant">e</button>
+                            <button class="calc-btn" data-action="operator">%</button>
+                        </div>
+                        <div class="calculator-buttons">
+                            <button class="calc-btn" data-action="clear">C</button>
+                            <button class="calc-btn" data-action="backspace">⌫</button>
+                            <button class="calc-btn" data-action="parenthesis">(</button>
+                            <button class="calc-btn" data-action="parenthesis">)</button>
+                            
+                            <button class="calc-btn" data-action="number">7</button>
+                            <button class="calc-btn" data-action="number">8</button>
+                            <button class="calc-btn" data-action="number">9</button>
+                            <button class="calc-btn" data-action="operator">÷</button>
+                            
+                            <button class="calc-btn" data-action="number">4</button>
+                            <button class="calc-btn" data-action="number">5</button>
+                            <button class="calc-btn" data-action="number">6</button>
+                            <button class="calc-btn" data-action="operator">×</button>
+                            
+                            <button class="calc-btn" data-action="number">1</button>
+                            <button class="calc-btn" data-action="number">2</button>
+                            <button class="calc-btn" data-action="number">3</button>
+                            <button class="calc-btn" data-action="operator">-</button>
+                            
+                            <button class="calc-btn" data-action="number">0</button>
+                            <button class="calc-btn" data-action="decimal">.</button>
+                            <button class="calc-btn" data-action="equals">=</button>
+                            <button class="calc-btn" data-action="operator">+</button>
+                        </div>
+                    </div>
+                </div>
+
+             
+
+        
+
+         
+          
+
+           
+         
+
+
+
+                <!-- Prime Number Calculator -->
+                <div class="tool-card" id="prime-number">
+                    <h3><i class="fas fa-sort-numeric-down"></i> Prime Number Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="prime-operation">Operation:</label>
+                            <select id="prime-operation">
+                                <option value="check">Check if Prime</option>
+                                <option value="next">Find Next Prime</option>
+                                <option value="previous">Find Previous Prime</option>
+                                <option value="factors">Prime Factors</option>
+                                <option value="range">Primes in Range</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="prime-input">Number:</label>
+                            <input type="number" id="prime-input" min="1" placeholder="Enter number">
+                        </div>
+                        <div class="input-group range-inputs" style="display: none;">
+                            <label for="prime-range-start">Start:</label>
+                            <input type="number" id="prime-range-start" min="1" placeholder="Enter start">
+                            <label for="prime-range-end">End:</label>
+                            <input type="number" id="prime-range-end" min="1" placeholder="Enter end">
+                        </div>
+                        <button id="calculate-prime" class="btn">Calculate</button>
+                        <div id="prime-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- GCD & LCM Calculator -->
+                <div class="tool-card" id="gcd-lcm">
+                    <h3><i class="fas fa-calculator"></i> GCD & LCM Calculator</h3>
+                    <div class="calculator-container">
+                        <div class="input-group">
+                            <label for="gcd-lcm-numbers">Enter numbers (comma-separated):</label>
+                            <input style="color: black;" type="text" id="gcd-lcm-numbers" class="data-input" placeholder="e.g., 12, 18, 24">
+                        </div>
+                        <button id="calculate-gcd-lcm" class="calc-btn">Calculate</button>
+                        <div class="conversion-results">
+                            <div class="result-item">
+                                <span class="result-label">GCD:</span>
+                                <div class="result-group">
+                                    <span id="gcd-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="gcd-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">LCM:</span>
+                                <div class="result-group">
+                                    <span id="lcm-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="lcm-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complex Number Calculator -->
+                <div class="tool-card" id="complex-numbers">
+                    <h3><i class="fas fa-square-root-alt"></i> Complex Number Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="complex-operation">Operation:</label>
+                            <select id="complex-operation">
+                                <option value="add">Addition (+)</option>
+                                <option value="subtract">Subtraction (-)</option>
+                                <option value="multiply">Multiplication (×)</option>
+                                <option value="divide">Division (÷)</option>
+                                <!-- <option value="power">Power (^)</option> -->
+                                <!-- <option value="root">Root (√)</option> -->
+                            </select>
+                        </div>
+                        <div class="complex-inputs">
+                            <div class="input-group">
+                                <label>First Complex Number:</label>
+                                <input type="number" id="complex1-real" placeholder="Real part">
+                                <input type="number" id="complex1-imag" placeholder="Imaginary part">
+                            </div>
+                            <div class="input-group">
+                                <label>Second Complex Number:</label>
+                                <input type="number" id="complex2-real" placeholder="Real part">
+                                <input type="number" id="complex2-imag" placeholder="Imaginary part">
+                            </div>
+                            <div class="input-group power-input" style="display: none;">
+                                <label for="complex-power">Power:</label>
+                                <input type="number" id="complex-power" placeholder="Enter power">
+                            </div>
+                            <div class="input-group root-input" style="display: none;">
+                                <label for="complex-root">Root:</label>
+                                <input type="number" id="complex-root" placeholder="Enter root">
+                            </div>
+                        </div>
+                        <button id="calculate-complex" class="btn">Calculate</button>
+                        <div id="complex-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Vector Calculator -->
+                <div class="tool-card" id="vector-calculator">
+                    <h3><i class="fas fa-vector-square"></i> Vector Calculator</h3>
+                    <div class="calculator-container">
+                        <div class="input-group">
+                            <label for="vector-operation">Operation:</label>
+                            <select id="vector-operation" class="data-input">
+                                <option value="add">Addition</option>
+                                <option value="subtract">Subtraction</option>
+                                <option value="dot">Dot Product</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="vector1">Vector 1 (comma-separated complex numbers):</label>
+                            <input style="color: black;"    type="text" id="vector1" class="data-input" placeholder="e.g., 1+4i, 2-3i, 5+0i">
+                        </div>
+                        <div class="input-group">
+                            <label for="vector2">Vector 2 (comma-separated complex numbers):</label>
+                            <input style="color: black;" type="text" id="vector2" class="data-input" placeholder="e.g., 2+3i, 1-4i, 3+2i">
+                        </div>
+                        <button id="calculate-vector" class="calc-btn">Calculate</button>
+                        <div class="conversion-results">
+                            <div class="result-item">
+                                <span class="result-label">Result:</span>
+                                <div class="result-group">
+                                    <span id="vector-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="vector-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Derivative Calculator -->
+                <div class="tool-card" id="derivative-calculator">
+                    <h3><i class="fas fa-superscript"></i> Derivative Calculator</h3>
+                    <div class="calculator-container">
+                        <div class="input-group">
+                            <label for="derivative-function">Function:</label>
+                            <input style="color: black;" type="text" id="derivative-function" class="data-input" placeholder="e.g., x^2 + 2*x + 1">
+                        </div>
+                        <div class="input-group">
+                            <label for="derivative-variable">Variable:</label>
+                            <input style="color: black;" type="text" id="derivative-variable" class="data-input" placeholder="e.g., x" value="x">
+                        </div>
+                        <div class="input-group">
+                            <label for="derivative-order">Order:</label>
+                            <input style="color: black;" type="number" id="derivative-order" class="data-input" value="1" min="1">
+                        </div>
+                        <button id="calculate-derivative" class="calc-btn">Calculate</button>
+                        <div class="conversion-results">
+                            <div class="result-item">
+                                <span class="result-label">Result:</span>
+                                <div class="result-group">
+                                    <span id="derivative-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="derivative-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integral Calculator -->
+                <div class="tool-card" id="integral-calculator">
+                    <h3><i class="fas fa-integral"></i> Integral Calculator</h3>
+                    <div class="calculator-container">
+                        <div class="input-group">
+                            <label for="integral-function">Function:</label>
+                            <input style="color: black;" type="text" id="integral-function" class="data-input" placeholder="e.g., x^2 + 2*x + 1">
+                        </div>
+                        <div class="input-group">
+                            <label for="integral-variable">Variable:</label>
+                            <input style="color: black;" type="text" id="integral-variable" class="data-input" placeholder="e.g., x" value="x">
+                        </div>
+                        <div class="input-group">
+                            <label for="integral-lower">Lower Bound (optional):</label>
+                            <input type="text" id="integral-lower" class="data-input" placeholder="e.g., 0">
+                        </div>
+                        <div class="input-group">
+                            <label for="integral-upper">Upper Bound (optional):</label>
+                            <input type="text" id="integral-upper" class="data-input" placeholder="e.g., 1">
+                        </div>
+                        <button id="calculate-integral" class="calc-btn">Calculate</button>
+                        <div class="conversion-results">
+                            <div class="result-item">
+                                <span class="result-label">Result:</span>
+                                <div class="result-group">
+                                    <span id="integral-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="integral-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Series Calculator -->
+                <div class="tool-card" id="series-calculator">
+                    <h3><i class="fas fa-infinity"></i> Series Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="series-type">Series Type:</label>
+                            <select id="series-type">
+                                <option value="arithmetic">Arithmetic Series</option>
+                                <option value="geometric">Geometric Series</option>
+                            </select>
+                        </div>
+                        <div class="series-inputs">
+                            <div class="input-group">
+                                <label for="series-first-term">First Term:</label>
+                                <input type="number" id="series-first-term" step="any" placeholder="Enter first term">
+                            </div>
+                            <div class="input-group">
+                                <label for="series-common-diff">Common Difference/Ratio:</label>
+                                <input type="number" id="series-common-diff" step="any" placeholder="Enter common difference/ratio">
+                            </div>
+                            <div class="input-group">
+                                <label for="series-terms">Number of Terms:</label>
+                                <input type="number" id="series-terms" min="1" placeholder="Enter number of terms">
+                            </div>
+                        </div>
+                        <button id="calculate-series" class="btn">Calculate</button>
+                        <div id="series-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Probability Calculator -->
+                <div class="tool-card" id="probability-calculator">
+                    <h3><i class="fas fa-dice"></i> Probability Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="probability-type">Type:</label>
+                            <select id="probability-type">
+                                <option value="basic">Basic Probability</option>
+                                <option value="conditional">Conditional Probability</option>
+                                <option value="binomial">Binomial Distribution</option>
+                                <option value="normal">Normal Distribution</option>
+                                <option value="poisson">Poisson Distribution</option>
+                            </select>
+                        </div>
+                        <div class="probability-inputs">
+                            <!-- Basic Probability -->
+                            <div class="basic-probability">
+                                <div class="input-group">
+                                    <label for="favorable-outcomes">Favorable Outcomes:</label>
+                                    <input type="number" id="favorable-outcomes" min="0" placeholder="Enter favorable outcomes">
+                                </div>
+                                <div class="input-group">
+                                    <label for="total-outcomes">Total Outcomes:</label>
+                                    <input type="number" id="total-outcomes" min="1" placeholder="Enter total outcomes">
+                                </div>
+                            </div>
+                            <!-- Conditional Probability -->
+                            <div class="conditional-probability" style="display: none;">
+                                <div class="input-group">
+                                    <label for="p-a">P(A):</label>
+                                    <input type="number" id="p-a" step="0.01" min="0" max="1" placeholder="Enter P(A)">
+                                </div>
+                                <div class="input-group">
+                                    <label for="p-b-given-a">P(B|A):</label>
+                                    <input type="number" id="p-b-given-a" step="0.01" min="0" max="1" placeholder="Enter P(B|A)">
+                                </div>
+                            </div>
+                            <!-- Binomial Distribution -->
+                            <div class="binomial-distribution" style="display: none;">
+                                <div class="input-group">
+                                    <label for="n-trials">Number of Trials (n):</label>
+                                    <input type="number" id="n-trials" min="1" placeholder="Enter number of trials">
+                                </div>
+                                <div class="input-group">
+                                    <label for="k-successes">Number of Successes (k):</label>
+                                    <input type="number" id="k-successes" min="0" placeholder="Enter number of successes">
+                                </div>
+                                <div class="input-group">
+                                    <label for="p-success">Probability of Success (p):</label>
+                                    <input type="number" id="p-success" step="0.01" min="0" max="1" placeholder="Enter probability">
+                                </div>
+                            </div>
+                            <!-- Normal Distribution -->
+                            <div class="normal-distribution" style="display: none;">
+                                <div class="input-group">
+                                    <label for="mean">Mean (μ):</label>
+                                    <input type="number" id="mean" step="any" placeholder="Enter mean">
+                                </div>
+                                <div class="input-group">
+                                    <label for="std-dev">Standard Deviation (σ):</label>
+                                    <input type="number" id="std-dev" step="any" min="0" placeholder="Enter standard deviation">
+                                </div>
+                                <div class="input-group">
+                                    <label for="x-value">X Value:</label>
+                                    <input type="number" id="x-value" step="any" placeholder="Enter x value">
+                                </div>
+                            </div>
+                            <!-- Poisson Distribution -->
+                            <div class="poisson-distribution" style="display: none;">
+                                <div class="input-group">
+                                    <label for="lambda">Average Rate (λ):</label>
+                                    <input type="number" id="lambda" step="any" min="0" placeholder="Enter average rate">
+                                </div>
+                                <div class="input-group">
+                                    <label for="k-events">Number of Events (k):</label>
+                                    <input type="number" id="k-events" min="0" placeholder="Enter number of events">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="calculate-probability" class="btn">Calculate</button>
+                        <div id="probability-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Geometry Calculator -->
+                <div class="tool-card" id="geometry-calculator">
+                    <h3><i class="fas fa-draw-polygon"></i> Geometry Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="geometry-shape">Shape:</label>
+                            <select id="geometry-shape">
+                                <option value="circle">Circle</option>
+                                <option value="rectangle">Rectangle</option>
+                                <option value="triangle">Triangle</option>
+                                <option value="square">Square</option>
+                                <option value="parallelogram">Parallelogram</option>
+                                <option value="trapezoid">Trapezoid</option>
+                                <option value="sphere">Sphere</option>
+                                <option value="cube">Cube</option>
+                                <option value="cylinder">Cylinder</option>
+                                <option value="cone">Cone</option>
+                            </select>
+                        </div>
+                        <div class="geometry-inputs">
+                            <!-- Circle -->
+                            <div class="circle-inputs">
+                                <div class="input-group">
+                                    <label for="radius">Radius:</label>
+                                    <input type="number" id="radius" step="any" min="0" placeholder="Enter radius">
+                                </div>
+                            </div>
+                            <!-- Rectangle -->
+                            <div class="rectangle-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="length">Length:</label>
+                                    <input type="number" id="length" step="any" min="0" placeholder="Enter length">
+                                </div>
+                                <div class="input-group">
+                                    <label for="width">Width:</label>
+                                    <input type="number" id="width" step="any" min="0" placeholder="Enter width">
+                                </div>
+                            </div>
+                            <!-- Triangle -->
+                            <div class="triangle-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="base">Base:</label>
+                                    <input type="number" id="base" step="any" min="0" placeholder="Enter base">
+                                </div>
+                                <div class="input-group">
+                                    <label for="height">Height:</label>
+                                    <input type="number" id="height" step="any" min="0" placeholder="Enter height">
+                                </div>
+                                <div class="input-group">
+                                    <label for="side-a">Side a:</label>
+                                    <input type="number" id="side-a" step="any" min="0" placeholder="Enter side a">
+                                </div>
+                                <div class="input-group">
+                                    <label for="side-b">Side b:</label>
+                                    <input type="number" id="side-b" step="any" min="0" placeholder="Enter side b">
+                                </div>
+                                <div class="input-group">
+                                    <label for="side-c">Side c:</label>
+                                    <input type="number" id="side-c" step="any" min="0" placeholder="Enter side c">
+                                </div>
+                            </div>
+                            <!-- Square -->
+                            <div class="square-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="side">Side:</label>
+                                    <input type="number" id="side" step="any" min="0" placeholder="Enter side length">
+                                </div>
+                            </div>
+                            <!-- Parallelogram -->
+                            <div class="parallelogram-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="base-par">Base:</label>
+                                    <input type="number" id="base-par" step="any" min="0" placeholder="Enter base">
+                                </div>
+                                <div class="input-group">
+                                    <label for="height-par">Height:</label>
+                                    <input type="number" id="height-par" step="any" min="0" placeholder="Enter height">
+                                </div>
+                            </div>
+                            <!-- Trapezoid -->
+                            <div class="trapezoid-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="base1">Base 1:</label>
+                                    <input type="number" id="base1" step="any" min="0" placeholder="Enter base 1">
+                                </div>
+                                <div class="input-group">
+                                    <label for="base2">Base 2:</label>
+                                    <input type="number" id="base2" step="any" min="0" placeholder="Enter base 2">
+                                </div>
+                                <div class="input-group">
+                                    <label for="height-trap">Height:</label>
+                                    <input type="number" id="height-trap" step="any" min="0" placeholder="Enter height">
+                                </div>
+                            </div>
+                            <!-- Sphere -->
+                            <div class="sphere-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="radius-sphere">Radius:</label>
+                                    <input type="number" id="radius-sphere" step="any" min="0" placeholder="Enter radius">
+                                </div>
+                            </div>
+                            <!-- Cube -->
+                            <div class="cube-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="edge">Edge Length:</label>
+                                    <input type="number" id="edge" step="any" min="0" placeholder="Enter edge length">
+                                </div>
+                            </div>
+                            <!-- Cylinder -->
+                            <div class="cylinder-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="radius-cyl">Radius:</label>
+                                    <input type="number" id="radius-cyl" step="any" min="0" placeholder="Enter radius">
+                                </div>
+                                <div class="input-group">
+                                    <label for="height-cyl">Height:</label>
+                                    <input type="number" id="height-cyl" step="any" min="0" placeholder="Enter height">
+                                </div>
+                            </div>
+                            <!-- Cone -->
+                            <div class="cone-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="radius-cone">Radius:</label>
+                                    <input type="number" id="radius-cone" step="any" min="0" placeholder="Enter radius">
+                                </div>
+                                <div class="input-group">
+                                    <label for="height-cone">Height:</label>
+                                    <input type="number" id="height-cone" step="any" min="0" placeholder="Enter height">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="calculate-geometry" class="btn">Calculate</button>
+                        <div id="geometry-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Trigonometry Calculator -->
+                <div class="tool-card" id="trigonometry">
+                    <h3><i class="fas fa-sin"></i> Trigonometry Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group" style="display: flex; gap: 10px; align-items: center;">
+                            <div style="flex: 1;">
+                                <label for="trig-function">Function:</label>
+                                <select id="trig-function">
+                                    <option value="sin">Sine (sin)</option>
+                                    <option value="cos">Cosine (cos)</option>
+                                    <option value="tan">Tangent (tan)</option>
+                                    <option value="csc">Cosecant (csc)</option>
+                                    <option value="sec">Secant (sec)</option>
+                                    <option value="cot">Cotangent (cot)</option>
+                                    <option value="arcsin">Inverse Sine (arcsin)</option>
+                                    <option value="arccos">Inverse Cosine (arccos)</option>
+                                    <option value="arctan">Inverse Tangent (arctan)</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1;">
+                                <label for="angle">Angle:</label>
+                                <input type="number" id="angle" step="any" placeholder="Enter angle">
+                            </div>
+                            <div style="flex: 1;">
+                                <label for="trig-mode">Mode:</label>
+                                <select id="trig-mode">
+                                    <option value="degrees">Degrees</option>
+                                    <option value="radians">Radians</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="calculate-trig" class="btn">Calculate</button>
+                        <div id="trig-result" class="result-display"></div>
+                    </div>
+                </div>
+
+        
+
+                <!-- Matrix Calculator -->
+                <style>
+                    /* Force black text in matrix calculator inputs */
+                    #matrix-calculator .matrix-cell,
+                    #matrix-calculator .matrix-rows,
+                    #matrix-calculator .matrix-cols {
+                        color: #000000 !important;
+                    }
+                    /* Force black text in number inputs */
+                    #matrix-calculator input[type="number"] {
+                        color: #000000 !important;
+                        -webkit-text-fill-color: #000000 !important;
+                    }
+                    /* Force black text in dropdowns */
+                    #matrix-calculator select {
+                        color: #000000 !important;
+                    }
+                    /* Force black text in dropdown options */
+                    #matrix-calculator option {
+                        color: #000000 !important;
+                        background: #ffffff !important;
+                    }
+                </style>
+                <div class="tool-card" id="matrix-calculator">
+                    <h3><i class="fas fa-table"></i> Matrix Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="matrix-operation">Operation:</label>
+                            <select id="matrix-operation">
+                                <option value="add">Addition</option>
+                                <option value="subtract">Subtraction</option>
+                                <option value="multiply">Multiplication</option>
+                            </select>
+                        </div>
+                        <div class="matrix-inputs">
+                            <div class="matrix-container">
+                                <div class="matrix-header">
+                                    <h4>Matrix A</h4>
+                                    <div class="matrix-dimensions">
+                                        <div class="dimension-selector">
+                                            <label>Rows:</label>
+                                            <select style="color: black;" class="matrix-rows" data-matrix="a">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                        <div class="dimension-selector">
+                                            <label>Cols:</label>
+                                            <select style="color: black;" class="matrix-cols" data-matrix="a">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="matrix-a" class="matrix-grid">
+                                    <div class="matrix-row">
+                                        <input style="color: black;" type="number" class="matrix-cell" value="0">
+                                        <input style="color: black;" type="number" class="matrix-cell" value="0">
+                                    </div>
+                                    <div class="matrix-row">
+                                        <input style="color: black;" type="number" class="matrix-cell" value="0">
+                                        <input style="color: black;" type="number" class="matrix-cell" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="matrix-operator">
+                                <span id="matrix-operator">+</span>
+                            </div>
+                            
+                            <div class="matrix-container">
+                                <div class="matrix-header">
+                                    <h4>Matrix B</h4>
+                                    <div  class="matrix-dimensions">
+                                        <div class="dimension-selector">
+                                            <label>Rows:</label>
+                                            <select style="color: black;" class="matrix-rows" data-matrix="b">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                        <div class="dimension-selector">
+                                            <label>Cols:</label>
+                                            <select style="color: black;" class="matrix-cols" data-matrix="b">
+                                                <option value="1">1</option>
+                                                <option value="2" selected>2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="matrix-b" class="matrix-grid">
+                                    <div class="matrix-row">
+                                        <input style="color : black !important;" type="number" class="matrix-cell" value="0">
+                                        <input  style="color: black;" type="number" class="matrix-cell" value="0">
+                                    </div>
+                                    <div class="matrix-row">
+                                        <input style="color: black;" type="number" class="matrix-cell" value="0">
+                                        <input style="color: black;" type="number" class="matrix-cell" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="matrix-actions">
+                            <button id="calculate-matrix" class="btn">Calculate</button>
+                            <button id="clear-matrix" class="btn btn-secondary">Clear</button>
+                        </div>
+                        <div id="matrix-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Equation Solver -->
+                <div class="tool-card" id="equation-solver">
+                    <h3><i class="fas fa-equals"></i> Equation Solver</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label  for="equation-type">Equation Type:</label>
+                            <select id="equation-type">
+                                <option value="linear">Linear Equation</option>
+                                <option value="quadratic">Quadratic Equation</option>
+                                <option value="cubic">Cubic Equation</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="equation-input">Equation:</label>
+                            <input style="color: black;" type="text" id="equation-input" placeholder="e.g., 2x + 3 = 7">
+                        </div>
+                        <button id="solve-equation" class="btn">Solve</button>
+                        <div id="equation-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Function Plotter -->
+                <div class="tool-card" id="function-plotter">
+                    <h3><i class="fas fa-chart-line"></i> Function Plotter</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="function-input">Function:</label>
+                            <input style="color: black;" type="text" id="function-input" placeholder="e.g., x^2 + 2x + 1">
+                        </div>
+                        <div class="input-group">
+                            <label for="x-min">X Min:</label>
+                            <input style="color: black;" type="number" id="x-min" value="-10">
+                            <label style="color: black;" for="x-max">X Max:</label>
+                            <input style="color: black;" type="number" id="x-max" value="10">
+                        </div>
+                        <div class="input-group">
+                            <label for="y-min">Y Min:</label>
+                            <input style="color: black;" type="number" id="y-min" value="-10">
+                            <label for="y-max">Y Max:</label>
+                            <input style="color: black;" type="number" id="y-max" value="10">
+                        </div>
+                        <button id="plot-function" class="btn">Plot</button>
+                        <div id="plot-container" class="plot-container"></div>
+                    </div>
+                </div>
+
+                <!-- Statistics Calculator -->
+                <style>
+                    /* Ensure statistics results are visible */
+                    .statistics-results {
+                        margin-top: 20px;
+                        padding: 20px;
+                        border-radius: 8px;
+                        background-color: #f8f9fa;
+                        border: 1px solid #dee2e6;
+                        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+                        display: block !important; /* Force display */
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+                    
+                    .statistics-results .result-item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 12px;
+                        padding: 10px 15px;
+                        background-color: #fff;
+                        border-radius: 6px;
+                        border: 1px solid #e9ecef;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .statistics-results .result-item:hover {
+                        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+                        transform: translateY(-1px);
+                    }
+                    
+                    .statistics-results .result-label {
+                        font-weight: 500;
+                        color: #212529;
+                        font-size: 0.95rem;
+                    }
+                    
+                    .statistics-results .result-value {
+                        font-family: 'Courier New', monospace;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        color: #000 !important; /* Force black text */
+                        background-color: #f8f9fa;
+                        padding: 4px 8px;
+                        border-radius: 4px;
+                        border: 1px solid #dee2e6;
+                        min-width: 80px;
+                        text-align: right;
+                    }
+                    
+                    .statistics-results .result-group {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    
+                    .statistics-results .copy-btn {
+                        background: none;
+                        border: none;
+                        color: #6c757d;
+                        cursor: pointer;
+                        padding: 4px;
+                        border-radius: 4px;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .statistics-results .copy-btn:hover {
+                        color: #0d6efd;
+                        background-color: #e9ecef;
+                    }
+                    .result-item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        padding: 8px 12px;
+                        background-color: white;
+                        border-radius: 4px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                    }
+                    .result-label {
+                        font-weight: bold;
+                        color: #333;
+                    }
+                    .result-value {
+                        color: #000;
+                        font-family: monospace;
+                        font-size: 1.1em;
+                    }
+                    .statistics-results.error {
+                        color: #dc3545;
+                        background-color: #f8d7da;
+                        border: 1px solid #f5c6cb;
+                        padding: 10px;
+                        border-radius: 4px;
+                        margin-top: 10px;
+                    }
+                </style>
+                <div class="tool-card" id="statistics">
+                    <h3>Statistics Calculator</h3>
+                    <div class="calculator-container">
+                        <div class="input-group">
+                            <label for="data-input">Enter numbers (comma-separated):</label>
+                            <input style="color: black;" type="text" id="data-input" class="data-input" placeholder="e.g., 1, 2, 3, 4, 5">
+                        </div>
+                        <button id="calculate-statistics" class="calc-btn">Calculate Statistics</button>
+                        <div class="statistics-results">
+                            <div class="result-item">
+                                <span class="result-label">Mean:</span>
+                                <div class="result-group">
+                                    <span id="mean-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="mean-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Median:</span>
+                                <div class="result-group">
+                                    <span id="median-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="median-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Mode:</span>
+                                <div class="result-group">
+                                    <span id="mode-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="mode-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        
+                            <div class="result-item">
+                                <span class="result-label">Variance:</span>
+                                <div class="result-group">
+                                    <span id="variance-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="variance-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Range:</span>
+                                <div class="result-group">
+                                    <span id="range-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="range-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Minimum:</span>
+                                <div class="result-group">
+                                    <span id="min-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="min-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Maximum:</span>
+                                <div class="result-group">
+                                    <span id="max-result" class="result-value"></span>
+                                    <button class="copy-btn" data-target="max-result" title="Copy to clipboard">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Number Converter -->
+                <div class="tool-card" id="number-converter">
+                    <h3><i class="fas fa-exchange-alt"></i> Number Converter</h3>
+                        <div class="input-group">
+                        <label for="number-input">Number:</label>
+                        <input style="color: #000;" type="text" id="number-input" placeholder="Enter number">
+                        </div>
+                        <div class="input-group">
+                        <label for="from-type">From:</label>
+                        <select id="from-type">
+                                <option value="decimal">Decimal</option>
+                                <option value="binary">Binary</option>
+                                <option value="octal">Octal</option>
+                                <option value="hexadecimal">Hexadecimal</option>
+                            </select>
+                        <label for="to-type">To:</label>
+                        <select id="to-type">
+                            <option value="decimal">Decimal</option>
+                            <option value="binary">Binary</option>
+                            <option value="octal">Octal</option>
+                            <option value="hexadecimal">Hexadecimal</option>
+                        </select>
+                        <button id="convert-number" type="button">Convert</button>
+                        </div>
+                                <div class="result-group">
+                        <label for="conversion-result">Result:</label>
+                        <input type="text" id="conversion-result" readonly>
+                                </div>
+                    <table class="conversion-table" style="margin-top:1em;width:100%;max-width:400px;">
+                        <tr><th>Type</th><th>Value</th></tr>
+                        <tr><td>Decimal</td><td id="table-decimal"></td></tr>
+                        <tr><td>Binary</td><td id="table-binary"></td></tr>
+                        <tr><td>Octal</td><td id="table-octal"></td></tr>
+                        <tr><td>Hexadecimal</td><td id="table-hex"></td></tr>
+                    </table>
+                </div>
+
+                <!-- Prime Factorization -->
+                <div class="tool-card" id="prime-factorization">
+                    <h3><i class="fas fa-sort-numeric-down"></i> Prime Factorization</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="number-to-factorize">Number:</label>
+                            <input style="color: black;" type="number" id="number-to-factorize" placeholder="Enter a number">
+                        </div>
+                        <button id="factorize-number" class="btn">Factorize</button>
+                        <div id="factorization-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Unit Converter -->
+                <div class="tool-card" id="unit-converter">
+                    <h3><i class="fas fa-ruler"></i> Unit Converter</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="conversion-type">Conversion Type:</label>
+                            <select id="conversion-type" class="dark-mode-select">
+                                <option value="length">Length</option>
+                                <option value="weight">Weight</option>
+                                <option value="temperature">Temperature</option>
+                                <option value="area">Area</option>
+                                <option value="volume">Volume</option>
+                                <option value="time">Time</option>
+                                <option value="speed">Speed</option>
+                            </select>
+                        </div>
+                        <div class="unit-conversion-container">
+                            <div class="unit-group">
+                                <label for="from-unit">From Unit:</label>
+                                <select id="from-unit" class="dark-mode-select"></select>
+                            </div>
+                            <div class="unit-group">
+                                <label for="to-unit">To Unit:</label>
+                                <select id="to-unit" class="dark-mode-select"></select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="conversion-value">Value:</label>
+                            <input style="color: black;" type="number" id="conversion-value" step="any" placeholder="Enter value">
+                        </div>
+                        <button id="convert-unit" class="btn">Convert</button>
+                        <div id="unit-result" class="result-display"></div>
+                    </div>
+                </div>
+
+                <!-- Percentage Calculator -->
+                <div class="tool-card" id="percentage-calculator">
+                    <h3><i class="fas fa-percent"></i> Percentage Calculator</h3>
+                    <div class="tool-content">
+                        <div class="input-group">
+                            <label for="percentage-type">Calculation Type:</label>
+                            <select id="percentage-type">
+                                <option value="basic">Basic Percentage</option>
+                                <option value="increase">Percentage Increase</option>
+                                <option value="decrease">Percentage Decrease</option>
+                                <option value="of">Percentage of Number</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="percentage-value">Value:</label>
+                            <input type="number" id="percentage-value" step="any" placeholder="Enter value">
+                        </div>
+                        <div class="input-group">
+                            <label for="percentage-total">Total/Original Value:</label>
+                            <input style="color: black;" type="number" id="percentage-total" step="any" placeholder="Enter total/original value">
+                        </div>
+                        <button id="calculate-percentage" class="btn">Calculate</button>
+                        <div id="percentage-result" class="result-display"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About AllFreeTools</h3>
+                <p>Your one-stop destination for free online tools and utilities.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="../index.html">Home</a>
+                <a href="text-tools.html">Text Tools</a>
+                <a href="dev-tools.html">Developer Tools</a>
+                <a href="image-tools.html">Image Tools</a>
+                <a href="color-tools.html">Color Tools</a>
+                <a href="math-tools.html">Math Tools</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <p>Found a bug? Have a suggestion?</p>
+                <a href="mailto:rahimullahebrahimkhail564700@gmail.com">Contact Us</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 AllFreeTools. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Quick Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show Scientific Calculator by default
+            const calculatorCard = document.getElementById('calculator');
+            if (calculatorCard) {
+                calculatorCard.classList.add('active');
+            }
+
+            // Handle Quick Navigation clicks
+            document.querySelectorAll('.quick-nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    document.querySelectorAll('.quick-nav a').forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Get the target tool card ID
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    // Show the target tool card
+                    showToolCard(targetId);
+                });
+            });
+
+            function showToolCard(cardId) {
+                // Remove active class from all cards
+                document.querySelectorAll('.tool-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                
+                // Add active class to target card
+                const targetCard = document.getElementById(cardId);
+                if (targetCard) {
+                    targetCard.classList.add('active');
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            // Handle hash navigation
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                showToolCard(targetId);
+            }
+
+            // Initialize Complex Number Calculator event listeners
+            if (typeof initializeComplexNumberCalculator === 'function') {
+                initializeComplexNumberCalculator();
+            }
+            // Initialize Vector Calculator event listeners
+            if (typeof initializeVectorCalculator === 'function') {
+                initializeVectorCalculator();
+            }
+            // Initialize Derivative Calculator event listeners
+            if (typeof initializeDerivativeCalculator === 'function') {
+                initializeDerivativeCalculator();
+            }
+        });
+
+        // Debug script to help with input issues
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Debug script loaded');
+            
+            // Make all inputs writable
+            document.querySelectorAll('input').forEach(input => {
+                // Remove any existing event listeners that might block input
+                const newInput = input.cloneNode(true);
+                input.parentNode.replaceChild(newInput, input);
+                
+                // Make sure input is not disabled or readonly
+                newInput.disabled = false;
+                newInput.readOnly = false;
+                
+                // Add basic event listeners for debugging
+                newInput.addEventListener('input', function(e) {
+                    console.log('Input event:', e.target.value);
+                });
+                
+                newInput.addEventListener('keydown', function(e) {
+                    console.log('Keydown:', e.key);
+                });
+            });
+            
+            // Log when the page is fully loaded
+            console.log('Page fully loaded');
+        });
+    </script>
+    <script>
+        // Re-initialize the Integral Calculator after the debug script
+        if (typeof initializeIntegralCalculator === 'function') {
+            initializeIntegralCalculator();
+        }
+    </script>
+    <!-- Calculator re-init scripts must come after the debug script -->
+    <script src="../js/series-init.js"></script>
+    <script src="../js/geometry-init.js"></script>
+    <script src="../js/trigonometry-init.js"></script>
+    <script src="../js/unit-converter-init.js"></script>
+    <script src="../js/percentage.js"></script>
+</body>
+</html>
