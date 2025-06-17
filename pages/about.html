@@ -3,176 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - AllFreeOnlineTools</title>
+    <title>About Us - AllFreeTools</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .about-container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .about-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--text-color);
-        }
-        
-        .about-header h1 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-        }
-        
-        .about-header p {
-            color: var(--text-color);
-            opacity: 0.9;
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f6fa;
+            color: #111;
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
-
-        .about-section {
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+        .header {
+            background-color: #f5f6fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-
-        .about-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
         }
-
-        .about-section h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
+        .logo h1 {
+            color: #4a90e2;
             font-size: 1.5rem;
-            position: relative;
-            padding-bottom: 0.5rem;
+            font-weight: 700;
         }
-
-        .about-section h2::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 2px;
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
         }
-
-        .about-section p {
-            color: var(--text-color);
-            line-height: 1.8;
+        .nav-links a {
+            color: #111;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a.active, .nav-links a:hover {
+            background-color: #e1e4e8;
+            color: #4a90e2;
+        }
+        .theme-toggle { display: none !important; }
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .page-header {
+            text-align: center;
+            padding: 3rem 1rem 2rem 1rem;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #4a90e2;
             margin-bottom: 1rem;
         }
-
-        .team-grid {
+        .about-section {
+            margin-bottom: 2.5rem;
+        }
+        .about-section h2 {
+            font-size: 1.5rem;
+            color: #4a90e2;
+            margin-bottom: 0.75rem;
+        }
+        .about-section p {
+            color: #222;
+            font-size: 1.1rem;
+        }
+        .footer {
+            background-color: #fff;
+            padding: 3rem 1rem 1rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin: 2rem 0;
         }
-
-        .team-member {
-            text-align: center;
-            padding: 1.5rem;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .team-member:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .member-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            overflow: hidden;
-            border: 3px solid var(--primary-color);
-            padding: 3px;
-        }
-
-        .member-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .member-info h3 {
-            color: var(--primary-color);
-            margin: 0.5rem 0;
-        }
-
-        .member-role {
-            color: var(--secondary-color);
-            font-weight: 500;
+        .footer-section h3 {
+            color: #4a90e2;
             margin-bottom: 1rem;
+        }
+        .footer-section a {
+            color: #111;
+            text-decoration: none;
             display: block;
+            margin-bottom: 0.5rem;
         }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+        .footer-section a:hover {
+            color: #4a90e2;
         }
-
-        .social-links a {
-            color: var(--text-color);
-            font-size: 1.2rem;
-            transition: color 0.3s ease, transform 0.3s ease;
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1rem;
+            border-top: 1px solid #e1e4e8;
+            text-align: center;
         }
-
-        .social-links a:hover {
-            color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-
         @media (max-width: 768px) {
-            .about-container {
-                padding: 1rem;
-                margin: 1rem;
+            .navbar {
+                flex-direction: column;
+                height: auto;
             }
-            
-            .about-header h1 {
-                font-size: 2rem;
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
             }
-            
-            .about-section {
-                padding: 1rem;
+            .main-content {
+                padding: 1rem 0.5rem;
             }
-            
-            .team-grid {
+            .footer-content {
                 grid-template-columns: 1fr;
+            }
+        }
+        /* Hamburger menu styles */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #111;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #f5f6fa;
+            padding: 2rem;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+        .mobile-nav a {
+            display: block;
+            padding: 1rem;
+            font-size: 1.25rem;
+            color: #111;
+            text-decoration: none;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        .mobile-nav a:hover {
+            background-color: #e1e4e8;
+            color: #4a90e2;
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+            }
+            .mobile-nav {
+                display: block;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <nav class="navbar">
             <div class="logo">
-                <h1><a href="../index.html" style="text-decoration: none; color: inherit;">AllFreeOnlineTools</a></h1>
+                <h1>AllFreeTools</h1>
             </div>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
@@ -182,125 +198,61 @@
                 <a href="color-tools.html">Color Tools</a>
                 <a href="math-tools.html">Math Tools</a>
                 <a href="contact.html">Contact Us</a>
+                <a href="about.html" class="active">About Us</a>
+            </div>
+            <div class="theme-toggle" style="display:none;">
+                <i class="fas fa-moon"></i>
             </div>
         </nav>
     </header>
 
     <main class="main-content">
-        <div class="about-container">
-            <div class="about-header">
-                <h1>About AllFreeOnlineTools</h1>
-                <p>Your one-stop destination for free, easy-to-use online tools that simplify your digital life. We're committed to providing high-quality tools without any hidden costs or complicated setups.</p>
-            </div>
-
-            <div class="about-section">
-                <h2>Our Mission</h2>
-                <p>At AllFreeOnlineTools, we believe that everyone should have access to powerful digital tools without the need for expensive software or technical expertise. Our mission is to create a comprehensive collection of free, user-friendly tools that help you accomplish your tasks quickly and efficiently.</p>
-                <p>Whether you're a student, professional, or just someone who loves technology, our tools are designed to make your life easier and more productive.</p>
-            </div>
-
-            <div class="about-section">
-                <h2>Why Choose Us?</h2>
-                <p><strong>100% Free:</strong> All our tools are completely free to use with no hidden charges or subscription fees.</p>
-                <p><strong>No Registration Required:</strong> Start using our tools instantly without creating an account or providing personal information.</p>
-                <p><strong>User-Friendly:</strong> Our tools are designed with simplicity in mind, making them accessible to users of all skill levels.</p>
-                <p><strong>Secure & Private:</strong> We respect your privacy. Most of our tools run directly in your browser, ensuring your data stays on your device.</p>
-                <p><strong>Always Available:</strong> Access our tools anytime, anywhere, on any device with an internet connection.</p>
-            </div>
-
-            <div class="about-section">
-                <h2>Our Team</h2>
-                <p> AllFreeOnlineTools</p>
-                
-<!--                 <div class="team-grid">
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="https://ui-avatars.com/api/?name=John+Smith&background=random" alt="John Smith">
-                        </div>
-                        <div class="member-info">
-                            <h3>John Smith</h3>
-                            <span class="member-role">Founder & Lead Developer</span>
-                            <p>Passionate about creating tools that solve real-world problems.</p>
-                            <div class="social-links">
-                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="my_img.jpg" alt="Rahimullah Ebrahimkhail">
-                        </div>
-                        <div class="member-info">
-                            <h3>Rahiullah Ebrahimkhail</h3>
-                            <span class="member-role">frount end Designer , android developer</span>
-                            <p>Dedicated to creating intuitive and beautiful user experiences.</p>
-<!--                             <div class="social-links">
-                                <a href="#" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="about-section">
-                <h2>Our Values</h2>
-                <p><strong>Simplicity:</strong> We believe in making complex tasks simple and accessible to everyone.</p>
-                <p><strong>Quality:</strong> We're committed to providing reliable, high-quality tools that you can depend on.</p>
-                <p><strong>Innovation:</strong> We're constantly exploring new technologies and ideas to improve our tools.</p>
-                <p><strong>Community:</strong> We value our users' feedback and suggestions to make our tools better.</p>
-            </div>
-
-            <div class="about-section" style="text-align: center;">
-                <h2>Get In Touch</h2>
-                <p>Have questions, suggestions, or feedback? We'd love to hear from you!</p>
-                <a href="contact.html" class="btn" style="display: inline-block; margin-top: 1rem;">Contact Us</a>
-            </div>
-        </div>
+        <section class="page-header">
+            <h1>About Us</h1>
+            <p>Learn more about AllFreeTools, our mission, and the people behind the project.</p>
+        </section>
+        <section class="about-section">
+            <h2>Our Mission</h2>
+            <p>AllFreeTools was created to provide a comprehensive collection of free, fast, and privacy-focused online tools for everyone. We believe that essential utilities should be accessible to all, without ads, paywalls, or data tracking.</p>
+        </section>
+        <section class="about-section">
+            <h2>Who We Are</h2>
+            <p>This project is developed and maintained by Rahimullah Ebrahimkh. Our goal is to make your daily digital tasks easier, whether you're a student, developer, designer, or just someone who needs a quick tool on the go.</p>
+        </section>
+        <section class="about-section">
+            <h2>Contact & Feedback</h2>
+            <p>We welcome your feedback, suggestions, and bug reports. Please <a href="contact.html">contact us</a> or email <a href="mailto:rahimullahebrahimkhail564700@gmail.com">rahimullahebrahimkhail564700@gmail.com</a>.</p>
+        </section>
     </main>
 
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>About AllFreeOnlineTools</h3>
+                <h3>About AllFreeTools</h3>
                 <p>Your one-stop destination for free online tools and utilities.</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
+                <a href="../index.html">Home</a>
+                <a href="text-tools.html">Text Tools</a>
+                <a href="dev-tools.html">Developer Tools</a>
+                <a href="image-tools.html">Image Tools</a>
+                <a href="color-tools.html">Color Tools</a>
+                <a href="math-tools.html">Math Tools</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="about.html">About Us</a>
             </div>
             <div class="footer-section">
-                <h3>Legal</h3>
-                <ul>
-                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                    <li><a href="terms-conditions.html">Terms & Conditions</a></li>
-                    <li><a href="about.html">About Us</a></li>
-                </ul>
+                <h3>Support</h3>
+                <p>Found a bug? Have a suggestion?</p>
+                <a href="mailto:rahimullahebrahimkhail564700@gmail.com">Contact Us</a>
             </div>
-<!--             <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                </div>
-            </div> -->
         </div>
         <div class="footer-bottom">
-            <p>&copy; <span id="current-year"></span> AllFreeOnlineTools. All rights reserved.</p>
+            <p>&copy; 2025 AllFreeTools. All rights reserved.</p>
         </div>
     </footer>
 
-    <script>
-        // Update current year in footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
+    <script src="../js/main.js"></script>
 </body>
-</html>
-
+</html> 
